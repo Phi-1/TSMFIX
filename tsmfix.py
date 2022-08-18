@@ -1,6 +1,15 @@
 import json
 import os
 import re
+import sys
+
+GLOBAL = {
+    "NO_LOG": False
+}
+
+def log(message):
+    if not GLOBAL["NO_LOG"]:
+        print(message)
 
 def process_file(filename):
     if not ".js" in filename:
@@ -32,15 +41,17 @@ def process_folder(foldername):
     for name in os.listdir(foldername):
         path = f"{foldername}/{name}"
         if os.path.isfile(path):
-            print(f"[TSMFIX] Checking file \"{name}\"")
+            log(f"[TSMFIX] Checking file \"{name}\"")
             if process_file(path):
-                print(f"[TSMFIX] Successfully processed file \"{name}\"")
+                log(f"[TSMFIX] Successfully processed file \"{name}\"")
         elif os.path.isdir(path):
             process_folder(path)
 
 def main():
+    if sys.argv[1] == "nolog":
+        GLOBAL["NO_LOG"] = True
     if not os.path.exists("./tsconfig.json"):
-        print("[TSMFIX] No tsconfig.json found in current working directory")
+        log("[TSMFIX] No tsconfig.json found in current working directory")
         return
     tsconfig = {}
     with open("./tsconfig.json", "r") as file:
