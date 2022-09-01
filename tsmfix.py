@@ -48,8 +48,9 @@ def process_folder(foldername):
             process_folder(path)
 
 def main():
-    if sys.argv[1] == "nolog":
-        GLOBAL["NO_LOG"] = True
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "nolog":
+            GLOBAL["NO_LOG"] = True
     if not os.path.exists("./tsconfig.json"):
         log("[TSMFIX] No tsconfig.json found in current working directory")
         return
